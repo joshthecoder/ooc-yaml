@@ -1,13 +1,11 @@
 use yaml
-import yaml/Parser
+import yaml/[Parser, Event]
 
 main: func {
-    parser := YamlParser new()
+    parser := EventParser new()
     parser loadFromString("[1,2,3]")
 
-    i := parser parse()
-    while(i hasNext()) {
-        e := i next()
-        "got event!" println()
+    for(e: Event in parser) {
+        "Got event!" println()
     }
 }

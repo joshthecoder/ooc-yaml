@@ -11,7 +11,7 @@ EventType: cover {
 }
 
 EventData: cover {
-    startStream: extern(start_stream) StartStreamData
+    startStream: extern(start_stream) StreamStartData
     documentStart: extern(document_start) DocumentStartData
     documentEnd: extern(document_end) DocumentEndData
     alias: extern AliasData
@@ -40,11 +40,11 @@ DocumentEndData: cover {
 }
 
 AliasData: cover {
-    anchor: extern YamlChar*
+    anchor: extern UChar*
 }
 
 ScalarData: cover {
-    anchor, tag, value: extern YamlChar*
+    anchor, tag, value: extern UChar*
     length: extern SizeT
     plainImplicit: extern(plain_implicit) Int
     quotedImplicit: extern(quoted_implicit) Int
@@ -52,13 +52,13 @@ ScalarData: cover {
 }
 
 SequenceStartData: cover {
-    anchor, tag: extern YamlChar*
+    anchor, tag: extern UChar*
     implicit: extern Int
     style: extern Int
 }
 
 MappingStartData: cover {
-    anchor, tag: extern YamlChar*
+    anchor, tag: extern UChar*
     implicit: extern Int
     style: extern Int
 }
