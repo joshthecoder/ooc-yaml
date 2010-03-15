@@ -24,7 +24,7 @@ BaseParser: abstract class <T> extends Iterable<T> {
     }
 
     loadFromString: func ~withLength(text: String, length: SizeT) {
-        yaml_parser_set_input_string(parser&, text, length)
+        yaml_parser_set_input_string(parser&, text as const UChar*, length)
     }
     loadFromString: func(text: String) {
         loadFromString(text, text length())
@@ -35,8 +35,13 @@ BaseParser: abstract class <T> extends Iterable<T> {
     parse: abstract func -> T
 }
 
-EventParser: class extends BaseParser<Event> {
+EventParser: class <T> extends BaseParser<Event> {
     event: Event
+
+    init: func {
+        T = Event
+        super()
+    }
 
     parse: func -> T {
         if(!yaml_parser_parse(parser&, event&)) {
