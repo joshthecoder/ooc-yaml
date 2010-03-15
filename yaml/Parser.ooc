@@ -38,7 +38,7 @@ BaseParser: abstract class <T> extends Iterable<T> {
 EventParser: class extends BaseParser<Event> {
     event: Event
 
-    parse: func -> Event {
+    parse: func -> T {
         if(!yaml_parser_parse(parser&, event&)) {
             Exception new("Error while parsing!") throw()
         }
