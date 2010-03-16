@@ -1,31 +1,35 @@
 use yaml
-import yaml/[Parser, Event]
+import yaml/Parser
 
-MyParser: class extends YAMLParser {
-    init: func {
-        super()
-        setInputString("---\n[1,2,3]\n...")
+MyCallbacks: class extends YAMLCallback {
+    onDocumentStart: func -> Bool {
+        "Document start..." println()
+        true
+    }
+    onDocumentEnd: func -> Bool {
+        "End of document."
+        true
     }
 
-    onStreamStart: func(event: StreamStartEvent) -> Bool {
-        "Stream starting" println()
-        return true
+    onScalar: func -> Bool {
+        "Scalar: %s" format(event data scalar value) println()
+        true
     }
-    onStreamEnd: func(event: StreamEndEvent) -> Bool {
-        "Stream ending" println()
-        return true
+
+    onMappingStart: func -> Bool {
+        "Mapping start..." println()
+        true
     }
-    onScalar: func(event: ScalarEvent) -> Bool {
-        "Scalar!" println()
-        return true
-    }
-    onSequenceStart: func(event: SequenceStartEvent) -> Bool {
-        "Sequence!" println()
-        return true
+    onMappingEnd: func -> Bool {
+        "End of mapping." println()
+        true
     }
 }
 
 main: func {
-    parser := MyParser new()
-    parser parseAll()
+    parser := YAMLParser new()
+    parser setInputString("---\ntest: hi\n...")
+
+    doc := parser parseDocument()
+    doc getRootNode() class name println()
 }

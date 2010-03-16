@@ -1,5 +1,5 @@
 use yaml
-import yaml/[libyaml, Event]
+import yaml/[Event, Document]
 
 
 /**
@@ -16,51 +16,85 @@ YAMLParser: class {
         parser setInputString(text, text length())
     }
 
-    getNextEvent: func -> Event {
-        event := Event new()
-        parser parse(event event&)
+    parseEvent: func ~withEvent(event: Event*) {
+        if(!parser parse(event)) {
+            //TODO: better errors
+            YAMLError new("Error while parsing!") throw()
+        }
+    }
+    parseEvent: func -> Event* {
+        event: Event* = gc_malloc(sizeof(Event))
+        parseEvent(event)
         return event
     }
 
-    parseOne: func {
-        onEvent(getNextEvent())
-    }
-
-    parseAll: func {
-        event: Event
-
+    parseAll: func(callbacks: YAMLCallback) {
         while(true) {
-            event = getNextEvent()
-            if(onEvent(event) == false || event type() == EventType STREAM_END) break
+            parseEvent(callbacks event&)
+            if(callbacks onEvent() == false) break
         }
     }
 
-    onEvent: func(event: Event) -> Bool {
-        match event type() {
-            case EventType STREAM_START => onStreamStart(event as StreamStartEvent)
-            case EventType STREAM_END => onStreamEnd(event as StreamEndEvent)
-            case EventType DOCUMENT_START => onDocumentStart(event as DocumentStartEvent)
-            case EventType DOCUMENT_END => onDocumentEnd(event as DocumentEndEvent)
-            case EventType ALIAS => onAlias(event as AliasEvent)
-            case EventType SCALAR => onScalar(event as ScalarEvent)
-            case EventType SEQUENCE_START => onSequenceStart(event as SequenceStartEvent)
-            case EventType SEQUENCE_END => onSequenceEnd(event as SequenceEndEvent)
-            case EventType MAPPING_START => onMappingStart(event as MappingStartEvent)
-            case EventType MAPPING_END => onMappingEnd(event as MappingEndEvent)
+    parseDocument: func -> Document {
+        document := Document new()
+        parseAll(document)
+        return document
+    }
+}
+
+YAMLCallback: class {
+    event: Event
+
+    onEvent: func -> Bool {
+        match event type {
+            case EventType STREAM_START => onStreamStart()
+            case EventType STREAM_END => onStreamEnd()
+            case EventType DOCUMENT_START => onDocumentStart()
+            case EventType DOCUMENT_END => onDocumentEnd()
+            case EventType ALIAS => onAlias()
+            case EventType SCALAR => onScalar()
+            case EventType SEQUENCE_START => onSequenceStart()
+            case EventType SEQUENCE_END => onSequenceEnd()
+            case EventType MAPPING_START => onMappingStart()
+            case EventType MAPPING_END => onMappingEnd()
             case => true
         }
     }
 
-    onStreamStart: func(event: StreamStartEvent) -> Bool { true }
-    onStreamEnd: func(event: StreamEndEvent) -> Bool { true }
-    onDocumentStart: func(event: DocumentStartEvent) -> Bool { true }
-    onDocumentEnd: func(event: DocumentEndEvent) -> Bool { true }
-    onAlias: func(event: AliasEvent) -> Bool { true }
-    onScalar: func(event: ScalarEvent) -> Bool { true }
-    onSequenceStart: func(event: SequenceStartEvent) -> Bool { true }
-    onSequenceEnd: func(event: SequenceEndEvent) -> Bool { true }
-    onMappingStart: func(event: MappingStartEvent) -> Bool { true }
-    onMappingEnd: func(event: MappingEndEvent) -> Bool { true }
+    onStreamStart: func -> Bool { true }
+    onStreamEnd: func -> Bool { false }
+    onDocumentStart: func -> Bool { true }
+    onDocumentEnd: func -> Bool { true }
+    onAlias: func -> Bool { true }
+    onScalar: func -> Bool { true }
+    onSequenceStart: func -> Bool { true }
+    onSequenceEnd: func -> Bool { true }
+    onMappingStart: func -> Bool { true }
+    onMappingEnd: func -> Bool { true }
 }
 
 YAMLError: class extends Exception {}
+
+ParserStruct: cover from struct yaml_parser_s
+
+_Parser: cover from yaml_parser_t* {
+    new: static func -> This {
+        instance: This = gc_malloc(sizeof(ParserStruct))
+        gc_register_finalizer(instance, __destroy__, instance, null, null)
+        if(!instance _init()) {
+            Exception new("Failed to initialize parser!") throw()
+        }
+        return instance
+    }
+
+    __destroy__: func {
+        _delete()
+    }
+
+    _init: extern(yaml_parser_initialize) func -> Int
+    _delete: extern(yaml_parser_delete) func
+
+    setInputString: extern(yaml_parser_set_input_string) func(input: const UChar*, size: SizeT)
+
+    parse: extern(yaml_parser_parse) func(event: Event*) -> Int
+}
