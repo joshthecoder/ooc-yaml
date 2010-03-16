@@ -1,6 +1,8 @@
 use yaml
 import yaml/[Event, Document]
 
+import io/[File, FileReader]
+
 
 /**
     A YAML streaming, event-driven parser.
@@ -14,6 +16,15 @@ YAMLParser: class {
 
     setInputString: func(text: String) {
         parser setInputString(text, text length())
+    }
+
+    setInputFile: func(file: File) {
+        f := fopen(file getPath(), "r")
+        parser setInputFile(f)
+    }
+
+    setInputFile: func ~path(path: String) {
+        setInputFile(File new(path))
     }
 
     parseEvent: func ~withEvent(event: Event*) {
@@ -95,6 +106,7 @@ _Parser: cover from yaml_parser_t* {
     _delete: extern(yaml_parser_delete) func
 
     setInputString: extern(yaml_parser_set_input_string) func(input: const UChar*, size: SizeT)
+    setInputFile: extern(yaml_parser_set_input_file) func(file: FILE*)
 
     parse: extern(yaml_parser_parse) func(event: Event*) -> Int
 }

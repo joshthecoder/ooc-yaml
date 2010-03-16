@@ -15,7 +15,7 @@ EventType: cover {
     ALIAS: extern(YAML_ALIAS_EVENT) static Int
     SCALAR: extern(YAML_SCALAR_EVENT) static Int
     SEQUENCE_START: extern(YAML_SEQUENCE_START_EVENT) static Int
-    SEQUENCE_END: extern(YAML_SEQUENCE_START_EVENT) static Int
+    SEQUENCE_END: extern(YAML_SEQUENCE_END_EVENT) static Int
     MAPPING_START: extern(YAML_MAPPING_START_EVENT) static Int
     MAPPING_END: extern(YAML_MAPPING_END_EVENT) static Int
 }
