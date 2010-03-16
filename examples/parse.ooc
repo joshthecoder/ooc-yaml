@@ -4,7 +4,7 @@ import yaml/[Parser, Event]
 MyParser: class extends YAMLParser {
     init: func {
         super()
-        setInputString("[1,2,3]")
+        setInputString("---\n[1,2,3]\n...")
     }
 
     onStreamStart: func(event: StreamStartEvent) -> Bool {
