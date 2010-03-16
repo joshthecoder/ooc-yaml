@@ -25,7 +25,8 @@ Document: class extends YAMLCallback {
     }
 
     onScalar: func -> Bool {
-        insert(ScalarNode new((event data scalar value as String) clone()))
+        value: String = event data scalar value as Char*
+        insert(ScalarNode new(value clone()))
         return true
     }
 
@@ -53,17 +54,28 @@ Document: class extends YAMLCallback {
         return true
     }
 
-    onDocumentEnd: func -> Bool { false }
+    onDocumentEnd: func -> Bool {
+        if(stack size()) {
+            YAMLError new("Premature ending of document!") throw()
+        }
+        return false
+    }
 }
 
-DocumentNode: abstract class {}
+DocumentNode: abstract class {
+    toString: abstract func -> String
+}
 
-EmptyNode: class extends DocumentNode {}
+EmptyNode: class extends DocumentNode {
+    toString: func -> String { "Empty" }
+}
 
 ScalarNode: class extends DocumentNode {
     value: String
 
     init: func(=value) {}
+
+    toString: func -> String { value }
 }
 
 SequenceNode: class extends DocumentNode {
@@ -72,6 +84,8 @@ SequenceNode: class extends DocumentNode {
     init: func {
         nodes = LinkedList<DocumentNode> new()
     }
+
+    toString: func -> String { "Sequence" }
 
     toList: func -> LinkedList<DocumentNode> { nodes }
 
@@ -87,6 +101,8 @@ MappingNode: class extends DocumentNode {
     init: func {
         map = HashMap<DocumentNode> new()
     }
+
+    toString: func -> String { "Mapping" }
 
     toHashMap: func -> HashMap<DocumentNode> { map }
 

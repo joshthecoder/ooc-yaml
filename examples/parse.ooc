@@ -1,5 +1,5 @@
 use yaml
-import yaml/Parser
+import yaml/[Parser, Document]
 
 MyCallbacks: class extends YAMLCallback {
     onDocumentStart: func -> Bool {
@@ -7,7 +7,7 @@ MyCallbacks: class extends YAMLCallback {
         true
     }
     onDocumentEnd: func -> Bool {
-        "End of document."
+        "End of document." println()
         true
     }
 
@@ -31,5 +31,11 @@ main: func {
     parser setInputString("---\ntest: hi\n...")
 
     doc := parser parseDocument()
-    doc getRootNode() class name println()
+    root := doc getRootNode()
+    match root class {
+        case MappingNode =>
+            for(n: DocumentNode in (root as MappingNode) toHashMap()) {
+                n toString() println()
+            }
+    }
 }
