@@ -1,64 +1,29 @@
 use yaml
-import yaml/Common
+import yaml/libyaml
 
-Event: cover from struct yaml_event_s {
-    type: extern Int
-    data: extern EventData
+
+Event: class {
+    event: _Event
+
+    type: func -> Int { event type }
 }
 
-EventType: cover {
-    STREAM_END: extern(YAML_STREAM_END_EVENT) static Int
-}
+StreamStartEvent: class extends Event {}
 
-EventData: cover {
-    startStream: extern(start_stream) StreamStartData
-    documentStart: extern(document_start) DocumentStartData
-    documentEnd: extern(document_end) DocumentEndData
-    alias: extern AliasData
-    scalar: extern ScalarData
-    sequenceStart: extern(sequence_start) SequenceStartData
-    mappingStart: extern(mapping_start) MappingStartData
-}
+StreamEndEvent: class extends Event {}
 
-StreamStartData: cover {
-    encoding: extern Int
-}
+DocumentStartEvent: class extends Event {}
 
-DocumentStartData: cover {
-    versionDirective: extern(version_directive) VersionDirective*
-    tagDirectives: extern(tag_directives) TagDirectives
-    implicit: extern Int
-}
+DocumentEndEvent: class extends Event {}
 
-TagDirectives: cover {
-    start: extern TagDirective*
-    end: extern TagDirective*
-}
+AliasEvent: class extends Event {}
 
-DocumentEndData: cover {
-    implicit: extern Int
-}
+ScalarEvent: class extends Event {}
 
-AliasData: cover {
-    anchor: extern UChar*
-}
+SequenceStartEvent: class extends Event {}
 
-ScalarData: cover {
-    anchor, tag, value: extern UChar*
-    length: extern SizeT
-    plainImplicit: extern(plain_implicit) Int
-    quotedImplicit: extern(quoted_implicit) Int
-    style: extern Int
-}
+SequenceEndEvent: class extends Event {}
 
-SequenceStartData: cover {
-    anchor, tag: extern UChar*
-    implicit: extern Int
-    style: extern Int
-}
+MappingStartEvent: class extends Event {}
 
-MappingStartData: cover {
-    anchor, tag: extern UChar*
-    implicit: extern Int
-    style: extern Int
-}
+MappingEndEvent: class extends Event {}
