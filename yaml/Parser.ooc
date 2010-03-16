@@ -42,7 +42,7 @@ YAMLParser: class {
     }
 }
 
-YAMLCallback: class {
+YAMLCallback: abstract class {
     event: Event
 
     onEvent: func -> Bool {
