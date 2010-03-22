@@ -95,16 +95,16 @@ SequenceNode: class extends DocumentNode {
 }
 
 MappingNode: class extends DocumentNode {
-    map: HashMap<DocumentNode>
+    map: HashMap<String, DocumentNode>
     key: String
 
     init: func {
-        map = HashMap<DocumentNode> new()
+        map = HashMap<String, DocumentNode> new()
     }
 
     toString: func -> String { "Mapping" }
 
-    toHashMap: func -> HashMap<DocumentNode> { map }
+    toHashMap: func -> HashMap<String, DocumentNode> { map }
 
     addPairValue: func(value: DocumentNode) {
         if(!key) {
