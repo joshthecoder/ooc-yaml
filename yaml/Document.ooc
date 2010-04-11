@@ -16,7 +16,9 @@ Document: class extends YAMLCallback {
     getRootNode: func -> DocumentNode { current }
 
     insert: func(node: DocumentNode) {
-        match current class {
+        nodeType := current class
+
+        match nodeType {
             case SequenceNode => (current as SequenceNode) add(node)
             case MappingNode => (current as MappingNode) addPairValue(node)
             case EmptyNode => current = node

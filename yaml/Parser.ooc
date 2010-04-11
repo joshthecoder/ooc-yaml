@@ -57,7 +57,9 @@ YAMLCallback: abstract class {
     event: Event
 
     onEvent: func -> Bool {
-        match event type {
+        eventType := event type
+
+        match eventType {
             case EventType STREAM_START => onStreamStart()
             case EventType STREAM_END => onStreamEnd()
             case EventType DOCUMENT_START => onDocumentStart()
