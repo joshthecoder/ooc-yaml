@@ -8,7 +8,7 @@ Document: class extends YAMLCallback {
     stack: Stack<DocumentNode>
     current: DocumentNode
 
-    init: func {
+    init: func ~doc {
         current = EmptyNode new()
         stack = Stack<DocumentNode> new()
     }
@@ -75,7 +75,7 @@ EmptyNode: class extends DocumentNode {
 ScalarNode: class extends DocumentNode {
     value: String
 
-    init: func(=value) {}
+    init: func ~scalar (=value) {}
 
     toString: func -> String { value }
 }
@@ -83,7 +83,7 @@ ScalarNode: class extends DocumentNode {
 SequenceNode: class extends DocumentNode {
     nodes: LinkedList<DocumentNode>
 
-    init: func {
+    init: func ~sequence {
         nodes = LinkedList<DocumentNode> new()
     }
 
@@ -100,7 +100,7 @@ MappingNode: class extends DocumentNode {
     map: HashMap<String, DocumentNode>
     key: String
 
-    init: func {
+    init: func ~mapping {
         map = HashMap<String, DocumentNode> new()
     }
 

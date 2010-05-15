@@ -14,6 +14,8 @@ YAMLParser: class {
         parser = _Parser new()
     }
 
+   //TODO: add finializer to delete _Parser so we don't leak
+
     setInputString: func(text: String) {
         parser setInputString(text, text length())
     }
@@ -34,7 +36,7 @@ YAMLParser: class {
         }
     }
     parseEvent: func -> Event* {
-        event: Event* = gc_malloc(sizeof(Event))
+        event := gc_malloc(Event instanceSize) as Event*
         parseEvent(event)
         return event
     }
@@ -86,26 +88,24 @@ YAMLCallback: abstract class {
     onMappingEnd: func -> Bool { true }
 }
 
-YAMLError: class extends Exception {}
+YAMLError: class extends Exception {
+    init: func { super("YAMLError") }
+}
 
 ParserStruct: cover from struct yaml_parser_s
 
 _Parser: cover from yaml_parser_t* {
     new: static func -> This {
-        instance: This = gc_malloc(sizeof(ParserStruct))
-        gc_register_finalizer(instance, __destroy__, instance, null, null)
+        instance: This = gc_malloc(ParserStruct instanceSize)
         if(!instance _init()) {
             Exception new("Failed to initialize parser!") throw()
         }
         return instance
     }
 
-    __destroy__: func {
-        _delete()
-    }
-
     _init: extern(yaml_parser_initialize) func -> Int
-    _delete: extern(yaml_parser_delete) func
+
+    delete: extern(yaml_parser_delete) func
 
     setInputString: extern(yaml_parser_set_input_string) func(input: const UChar*, size: SizeT)
     setInputFile: extern(yaml_parser_set_input_file) func(file: FILE*)
