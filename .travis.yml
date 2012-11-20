@@ -2,7 +2,7 @@ before_install:
   - sudo aptitude -y -q install curl make libgc-dev
   - git clone git://github.com/nddrylliog/rock.git 
   - cd rock
-  - make rescue
+  - make quick-rescue
   - cd ..
   - export PATH=$PATH:$PWD/rock/bin
 
