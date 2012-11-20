@@ -11,5 +11,5 @@ script:
   - cd samples
   - mkdir -p travis
   - rock -v parse-events.ooc -o=travis/parse-events
-  - output/parse-events
+  - travis/parse-events
 
