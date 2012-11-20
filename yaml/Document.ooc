@@ -57,7 +57,7 @@ Document: class extends YAMLCallback {
     }
 
     onDocumentEnd: func -> Bool {
-        if(stack size()) {
+        if(stack size) {
             YAMLError new("Premature ending of document!") throw()
         }
         return false
