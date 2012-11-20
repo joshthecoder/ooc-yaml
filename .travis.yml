@@ -1,5 +1,5 @@
 before_install:
-  - sudo aptitude -y -q install curl make libyaml-dev
+  - sudo aptitude -y -q install curl make libgc-dev
   - git clone git://github.com/nddrylliog/rock.git 
   - cd rock
   - make rescue
@@ -8,6 +8,7 @@ before_install:
 
 script:
   - export OOC_LIBS=$PWD
-  - rock -v samples/parse-events
-  - samples/parse-events
+  - cd samples
+  - rock -v parse-events
+  - ./parse-events
 
