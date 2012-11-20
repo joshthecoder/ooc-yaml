@@ -9,6 +9,7 @@ before_install:
 script:
   - export OOC_LIBS=$PWD
   - cd samples
-  - rock -v parse-events
+  - rm -rf parse-events
+  - rock -v parse-events.ooc
   - ./parse-events
 
