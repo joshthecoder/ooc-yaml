@@ -1,11 +1,9 @@
-before_script: "sudo aptitude -y -q install curl make libyaml-dev"
-
 before_install:
+  - sudo aptitude -y -q install curl make libyaml-dev
   - git clone git://github.com/nddrylliog/rock.git 
   - cd rock && make rescue
-  - export PATH=$PATH:$PWD/rock/bin
 
 script:
   - export OOC_LIBS=$PWD
-  - rock -v samples/parse-events
+  - bin/rock -v samples/parse-events
 
