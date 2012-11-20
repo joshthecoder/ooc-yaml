@@ -1,9 +1,13 @@
 before_install:
   - sudo aptitude -y -q install curl make libyaml-dev
   - git clone git://github.com/nddrylliog/rock.git 
-  - cd rock && make rescue
+  - cd rock
+  - make rescue
+  - cd ..
+  - export PATH=$PATH:$PWD/rock/bin
 
 script:
   - export OOC_LIBS=$PWD
-  - bin/rock -v samples/parse-events
+  - rock -v samples/parse-events
+  - samples/parse-events
 
