@@ -1,3 +1,4 @@
+
 use yaml
 import yaml/[Parser, Document]
 
@@ -24,10 +25,4 @@ MyCallbacks: class extends YAMLCallback {
         "End of mapping." println()
         true
     }
-}
-
-main: func {
-    parser := YAMLParser new()
-    parser setInputString("---\ntest: hi\n...")
-    parser parseAll(MyCallbacks new())
 }

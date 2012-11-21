@@ -10,6 +10,6 @@ script:
   - export OOC_LIBS=$PWD
   - cd samples
   - mkdir -p travis
-  - rock -v parse-events.ooc -o=travis/parse-events
-  - travis/parse-events
+  - rock -v from-string.ooc -o=travis/from-string && travis/from-string
+  - rock -v from-file.ooc -o=travis/from-file && travis/from-file
 

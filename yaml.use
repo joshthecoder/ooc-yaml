@@ -4,4 +4,4 @@ Origin: git://github.com/joshthecoder/ooc-yaml.git
 Description: Binding for the LibYAML parser / emitter
 Libs: -lyaml
 Includes: yaml.h
-SourcePath: .
+SourcePath: source
