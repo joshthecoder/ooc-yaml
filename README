@@ -1,9 +1,0 @@
-ooc-yaml
-========
-An ooc binding for the libyaml parser and emitter.
-
-Author: Joshua Roesslein
-License: MIT
-
-Yaml: http://yaml.org
-Libyaml: http://pyyaml.org/wiki/LibYAML
