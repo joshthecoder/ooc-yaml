@@ -27,7 +27,7 @@ Document: class extends YAMLCallback {
     }
 
     onScalar: func -> Bool {
-        value: String = event data scalar value as Char*
+        value: String = (event data scalar value as CString) toString()
         insert(ScalarNode new(value clone()))
         return true
     }

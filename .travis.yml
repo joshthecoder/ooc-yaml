@@ -10,4 +10,5 @@ script:
   - mkdir -p travis
   - rock -v from-string.ooc -o=travis/from-string && travis/from-string
   - rock -v from-file.ooc -o=travis/from-file && travis/from-file
+  - rock -v walker.ooc -o=travis/from-file && travis/walker
 
