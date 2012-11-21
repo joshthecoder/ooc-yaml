@@ -8,6 +8,6 @@ script:
   - export OOC_LIBS=$PWD
   - cd samples
   - mkdir -p travis
-  - rock from-string.ooc -o=travis/from-string && travis/from-string
-  - rock from-file.ooc -o=travis/from-file && travis/from-file
+  - rock -v from-string.ooc -o=travis/from-string && travis/from-string
+  - rock -v from-file.ooc -o=travis/from-file && travis/from-file
 
