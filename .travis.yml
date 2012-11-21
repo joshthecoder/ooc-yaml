@@ -1,15 +1,13 @@
 before_install:
   - sudo aptitude -y -q install curl make libgc-dev
-  - git clone git://github.com/nddrylliog/rock.git 
-  - cd rock
-  - make quick-rescue
-  - cd ..
+  - git clone -depth 1 git://github.com/nddrylliog/rock.git 
+  - (cd rock && make -s quick-rescue)
   - export PATH=$PATH:$PWD/rock/bin
 
 script:
   - export OOC_LIBS=$PWD
   - cd samples
   - mkdir -p travis
-  - rock -v from-string.ooc -o=travis/from-string && travis/from-string
-  - rock -v from-file.ooc -o=travis/from-file && travis/from-file
+  - rock from-string.ooc -o=travis/from-string && travis/from-string
+  - rock from-file.ooc -o=travis/from-file && travis/from-file
 
