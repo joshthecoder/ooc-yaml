@@ -2,3 +2,4 @@ from-file
 from-string
 walker
 emit
+output.yml

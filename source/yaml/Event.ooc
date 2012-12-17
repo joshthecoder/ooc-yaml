@@ -15,6 +15,12 @@ EventPointer: cover from Event* {
     initDocumentEnd: extern(yaml_document_end_event_initialize) func (Bool)
     initScalar: extern(yaml_scalar_event_initialize) func (CString, CString, CString, SizeT, Bool, Bool, YAMLScalarStyle)
 
+    initSequenceStart: extern(yaml_sequence_start_event_initialize) func (CString, CString, Bool, YAMLSequenceStyle)
+    initSequenceEnd: extern(yaml_sequence_end_event_initialize) func
+
+    initMappingStart: extern(yaml_mapping_start_event_initialize) func (CString, CString, Bool, YAMLMappingStyle)
+    initMappingEnd: extern(yaml_mapping_end_event_initialize) func
+
 }
 
 EventType: cover {
@@ -112,6 +118,18 @@ YAMLScalarStyle: enum /* from yaml_scalar_style_t */ {
     doubleQuoted: extern(YAML_DOUBLE_QUOTED_SCALAR_STYLE)
     literal: extern(YAML_LITERAL_SCALAR_STYLE)
     folded: extern(YAML_FOLDED_SCALAR_STYLE)
+}
+
+YAMLSequenceStyle: enum /* from yaml_sequence_style_t */ {
+    any: extern(YAML_ANY_SCALAR_STYLE)
+    block: extern(YAML_BLOCK_SEQUENCE_STYLE)
+    flow: extern(YAML_FLOW_SEQUENCE_STYLE)
+}
+
+YAMLMappingStyle: enum /* from yaml_mapping_style_t */ {
+    any: extern(YAML_ANY_MAPPING_STYLE)
+    block: extern(YAML_BLOCK_MAPPING_STYLE)
+    flow: extern(YAML_FLOW_MAPPING_STYLE)
 }
 
 YAMLError: enum /* from yaml_error_type_e */ {

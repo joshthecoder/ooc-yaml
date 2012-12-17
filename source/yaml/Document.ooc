@@ -1,5 +1,5 @@
 use yaml
-import yaml/Parser
+import yaml/[Parser, Event, Emitter]
 
 import structs/[Stack, LinkedList, HashMap]
 
@@ -62,14 +62,26 @@ Document: class extends YAMLCallback {
         }
         return false
     }
+
+    emit: func (emitter: YAMLEmitter) {
+        emitter documentStart()
+        getRootNode() emit(emitter)
+        emitter documentEnd()
+    }
 }
 
 DocumentNode: abstract class {
     toString: abstract func -> String
+
+    emit: abstract func (emitter: YAMLEmitter)
 }
 
 EmptyNode: class extends DocumentNode {
-    toString: func -> String { "Empty" }
+    toString: func -> String { "<empty>" }
+
+    emit: func (emitter: YAMLEmitter) {
+        // nothing there
+    }
 }
 
 ScalarNode: class extends DocumentNode {
@@ -78,6 +90,10 @@ ScalarNode: class extends DocumentNode {
     init: func ~scalar (=value) {}
 
     toString: func -> String { value }
+
+    emit: func (emitter: YAMLEmitter) {
+        emitter scalar(value)
+    }
 }
 
 SequenceNode: class extends DocumentNode {
@@ -93,6 +109,14 @@ SequenceNode: class extends DocumentNode {
 
     add: func(node: DocumentNode) {
         nodes add(node)
+    }
+
+    emit: func (emitter: YAMLEmitter) {
+        emitter sequenceStart()
+        for (n in nodes) {
+            n emit(emitter)
+        }
+        emitter sequenceEnd()
     }
 }
 
@@ -122,8 +146,57 @@ MappingNode: class extends DocumentNode {
             key = null
         }
     }
+
+    emit: func (emitter: YAMLEmitter) {
+        emitter mappingStart()
+        map each(|k, v|
+            emitter scalar(k)
+            v emit(emitter)
+        )
+        emitter mappingEnd()
+    }
 }
 
 /* bindings for YAMLDocument */
 
+YAMLDocumentStruct: cover from struct yaml_document_s
+
+YAMLDocument: cover from yaml_document_t* {
+
+    new: static func (vd: VersionDirective*, start: TagDirective*, end: TagDirective*, startImplicit: Bool, endImplicit: Bool) -> This {
+        doc := gc_malloc(YAMLDocumentStruct instanceSize) as This
+        if (!yaml_document_initialize(doc, vd, start, end, startImplicit, endImplicit)) {
+            Exception new("Could not initialize document") throw()
+        }
+        doc
+    }
+
+    delete: extern(yaml_document_delete) func
+
+    addScalar: extern(yaml_document_add_scalar) func (CString, CString, Int, YAMLScalarStyle) -> Int
+    addSequence: extern(yaml_document_add_sequence) func (CString, YAMLSequenceStyle) -> Int
+    addMapping: extern(yaml_document_add_mapping) func (CString, YAMLMappingStyle)
+
+    appendSequenceItem: extern(yaml_document_append_sequence_item) func (Int, Int)
+    appendMappingPair: extern(yaml_document_append_mapping_pair) func (Int, Int, Int)
+
+    getRootNode: extern(yaml_document_get_root_node) func -> YAMLNode*
+
+}
+
+yaml_document_initialize: extern func (YAMLDocument, VersionDirective*, TagDirective*,
+    TagDirective*, Bool, Bool) -> Int
+
+YAMLNode: cover from yaml_node_t {
+
+    type: YAMLNodeType
+
+}
+
+YAMLNodeType: enum /* from yaml_node_type_t */ {
+    empty: extern(YAML_NO_NODE)
+    scalar: extern(YAML_SCALAR_NODE)
+    sequence: extern(YAML_SEQUENCE_NODE)
+    mapping: extern(YAML_MAPPING_NODE)
+}
 
