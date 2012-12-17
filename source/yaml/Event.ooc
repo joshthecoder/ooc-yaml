@@ -6,6 +6,17 @@ Event: cover from struct yaml_event_s {
     data: extern EventData
 }
 
+EventPointer: cover from Event* {
+
+    initStreamStart: extern(yaml_stream_start_event_initialize) func (YAMLEncoding)
+    initStreamEnd: extern(yaml_stream_end_event_initialize) func ()
+    initDocumentStart: extern(yaml_document_start_event_initialize) func (VersionDirective*,
+        TagDirective*, TagDirective*, Bool)
+    initDocumentEnd: extern(yaml_document_end_event_initialize) func (Bool)
+    initScalar: extern(yaml_scalar_event_initialize) func (CString, CString, CString, SizeT, Bool, Bool, YAMLScalarStyle)
+
+}
+
 EventType: cover {
     EMPTY: extern(YAML_NO_EVENT) static Int
     STREAM_START: extern(YAML_STREAM_START_EVENT) static Int
@@ -31,7 +42,7 @@ EventData: cover {
 }
 
 StreamStartEvent: cover {
-    encoding: extern Int
+    encoding: extern YAMLEncoding
 }
 
 DocumentStartEvent: cover {
@@ -49,7 +60,7 @@ AliasEvent: cover {
 }
 
 ScalarEvent: cover {
-    anchor, tag, value: extern UChar*
+    anchor, tag, value: extern CString
     length: extern SizeT
     plainImplicit: extern(plain_implicit) Int
     quotedImplicit: extern(quoted_implicit) Int
@@ -57,7 +68,7 @@ ScalarEvent: cover {
 }
 
 SequenceStartEvent: cover {
-    anchor, tag: extern UChar*
+    anchor, tag: extern CString
     implicit: extern Int
     style: extern Int
 }
@@ -86,3 +97,59 @@ TagDirectives: cover {
 Mark: cover from yaml_mark_t {
     index, line, column: extern SizeT
 }
+
+YAMLEncoding: enum /* from yaml_encoding_t */ {
+    any: extern(YAML_ANY_ENCODING)
+    utf8: extern(YAML_UTF8_ENCODING)
+    utf16le: extern(YAML_UTF16LE_ENCODING)
+    utf16be: extern(YAML_UTF16BE_ENCODING)
+}
+
+YAMLScalarStyle: enum /* from yaml_scalar_style_t */ {
+    any: extern(YAML_ANY_SCALAR_STYLE)
+    plain: extern(YAML_PLAIN_SCALAR_STYLE)
+    singleQuoted: extern(YAML_SINGLE_QUOTED_SCALAR_STYLE)
+    doubleQuoted: extern(YAML_DOUBLE_QUOTED_SCALAR_STYLE)
+    literal: extern(YAML_LITERAL_SCALAR_STYLE)
+    folded: extern(YAML_FOLDED_SCALAR_STYLE)
+}
+
+YAMLError: enum /* from yaml_error_type_e */ {
+    /** No error is produced. */
+    no: extern(YAML_NO_ERROR)
+
+    /** Cannot allocate or reallocate a block of memory. */
+    memory: extern(YAML_MEMORY_ERROR)
+
+    /** Cannot read or decode the input stream. */
+    reader: extern(YAML_READER_ERROR)
+
+    /** Cannot scan the input stream. */
+    scanner: extern(YAML_SCANNER_ERROR)
+
+    /** Cannot parse the input stream. */
+    parser: extern(YAML_PARSER_ERROR)
+
+    /** Cannot compose a YAML document. */
+    composer: extern(YAML_COMPOSER_ERROR)
+
+    /** Cannot write to the output stream. */
+    writer: extern(YAML_WRITER_ERROR)
+
+    /** Cannot emit a YAML stream. */
+    emitter: extern(YAML_EMITTER_ERROR)
+
+    toString: func -> String {
+        match this {
+            case no => "No error is produced"
+            case memory => "Cannot allocate or reallocate a block of memory"
+            case reader => "Cannot read or decode the input stream"
+            case scanner => "Cannot scan the input stream"
+            case parser => "Cannot parse the input stream"
+            case composer => "Cannot compose a YAML document"
+            case writer => "Cannot write to the output stream"
+            case emitter => "Cannot emit a YAML stream"
+        }
+    }
+}
+

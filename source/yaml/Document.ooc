@@ -123,3 +123,7 @@ MappingNode: class extends DocumentNode {
         }
     }
 }
+
+/* bindings for YAMLDocument */
+
+
