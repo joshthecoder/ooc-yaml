@@ -147,6 +147,10 @@ MappingNode: class extends DocumentNode {
         }
     }
 
+    put: func (key: String, value: DocumentNode) {
+        map put(key, value)
+    }
+
     emit: func (emitter: YAMLEmitter) {
         emitter mappingStart()
         map each(|k, v|
