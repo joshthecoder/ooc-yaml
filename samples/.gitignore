@@ -1,5 +1,4 @@
-from-file
-from-string
-walker
-emit
+*
+!*.ooc
+!*.yml
 output.yml
