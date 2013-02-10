@@ -5,3 +5,6 @@ Description: Binding for the LibYAML parser / emitter
 Libs: -lyaml
 Includes: yaml.h
 SourcePath: source
+
+AndroidLibs: libyaml
+AndroidIncludePaths: ../libyaml/include
