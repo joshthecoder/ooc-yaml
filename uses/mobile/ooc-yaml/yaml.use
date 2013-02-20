@@ -1,9 +1,0 @@
-Name: LibYAML
-Version: 1.0
-Origin: git://github.com/joshthecoder/ooc-yaml.git
-Description: Binding for the LibYAML parser / emitter
-Includes: yaml.h
-SourcePath: ../../../source
-
-AndroidLibs: c_yaml
-AndroidIncludePaths: ../c_yaml/include
