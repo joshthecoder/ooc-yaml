@@ -6,10 +6,10 @@ Includes: yaml.h
 SourcePath: source
 
 version (!android) {
-  Libs: -lyaml
+    Pkgs: yaml-0.1
 }
 
 version (android) {
-  AndroidLibs: c_yaml
-  AndroidIncludePaths: ../c_yaml/include
+    AndroidLibs: c_yaml
+    AndroidIncludePaths: ../c_yaml/include
 }
