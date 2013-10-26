@@ -53,6 +53,10 @@ YAMLParser: class {
         parseAll(document)
         return document
     }
+
+    destroy: func {
+        parser delete()
+    }
 }
 
 YAMLCallback: abstract class {
