@@ -17,6 +17,8 @@ Walker: class {
 
   indentation := 0
 
+  init: func
+
   walk: func (node: DocumentNode) {
     match (node) {
       case seq: ScalarNode => walkScalar(seq)

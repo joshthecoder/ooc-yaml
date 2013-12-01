@@ -1,8 +1,10 @@
 
 use yaml
-import yaml/[Parser, Document]
+import yaml/[Parser, Document, Event]
 
 MyCallbacks: class extends YAMLCallback {
+    init: func
+
     onStreamStart: func -> Bool {
         "Stream start..." println()
         true
