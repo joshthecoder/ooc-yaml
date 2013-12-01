@@ -79,6 +79,8 @@ DocumentNode: abstract class {
 EmptyNode: class extends DocumentNode {
     toString: func -> String { "<empty>" }
 
+    init: func
+
     emit: func (emitter: YAMLEmitter) {
         // nothing there
     }

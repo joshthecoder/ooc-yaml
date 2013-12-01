@@ -94,6 +94,7 @@ YAMLCallback: abstract class {
 
 YAMLError: class extends Exception {
     init: func { super("YAMLError") }
+    init: super func ~noOrigin
 }
 
 ParserStruct: cover from struct yaml_parser_s
