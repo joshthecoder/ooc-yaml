@@ -21,7 +21,7 @@ YAMLParser: class {
     }
 
     setInputFile: func(file: File) {
-        parser setInputString(file read())
+        setInputString(file read())
     }
 
     setInputFile: func ~path(path: String) {
