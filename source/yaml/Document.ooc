@@ -1,7 +1,7 @@
 use yaml
 import yaml/[Parser, Event, Emitter]
 
-import structs/[Stack, LinkedList, HashMap]
+import structs/[Stack, ArrayList, HashMap]
 
 
 Document: class extends YAMLCallback {
@@ -99,15 +99,15 @@ ScalarNode: class extends DocumentNode {
 }
 
 SequenceNode: class extends DocumentNode {
-    nodes: LinkedList<DocumentNode>
+    nodes: ArrayList<DocumentNode>
 
     init: func ~sequence {
-        nodes = LinkedList<DocumentNode> new()
+        nodes = ArrayList<DocumentNode> new()
     }
 
     toString: func -> String { "Sequence" }
 
-    toList: func -> LinkedList<DocumentNode> { nodes }
+    toList: func -> ArrayList<DocumentNode> { nodes }
 
     add: func(node: DocumentNode) {
         nodes add(node)

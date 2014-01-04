@@ -119,7 +119,7 @@ YAMLEmitter: class {
 
 EmitterStruct: cover from struct yaml_emitter_s {
     error: YAMLError
-    problem: extern CString 
+    problem: extern CString
 }
 
 _Emitter: cover from yaml_emitter_t* {
