@@ -21,12 +21,12 @@ YAMLEmitter: class {
         emitter setCanonical(false)
     }
 
-    setOutputFile: func(file: File) {
+    setOutputFile: func (file: File) {
         _file = fopen(file getPath(), "wb")
         emitter setOutputFile(_file)
     }
 
-    setOutputFile: func ~path(path: String) {
+    setOutputFile: func ~path (path: String) {
         setOutputFile(File new(path))
     }
 

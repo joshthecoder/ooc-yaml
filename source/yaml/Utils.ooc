@@ -1,7 +1,23 @@
 
+// sdk
+import io/File
+
 // ours
 use yaml
-import yaml/[Document, Parser]
+import yaml/[Document, Parser, Emitter]
+
+extend Document {
+
+    write: func ~file (file: File) {
+        emitter := YAMLEmitter new()
+        emitter setOutputFile(file)
+        emitter streamStart()
+        emit(emitter)
+        emitter streamEnd()
+        emitter delete()
+    }
+
+}
 
 extend DocumentNode {
 
