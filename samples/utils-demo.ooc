@@ -2,9 +2,10 @@
 use yaml
 import yaml/[Parser, Document, Utils]
 
+import io/File
+
 main: func {
-    parser := YAMLParser new()
-    parser setInputFile("bottle.yml")
+    parser := YAMLParser new(File new("bottle.yml"))
     doc := parser parseDocument()
     root := doc getRootNode()
 

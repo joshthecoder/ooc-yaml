@@ -14,7 +14,15 @@ YAMLParser: class {
         parser = _Parser new()
     }
 
-    // TODO: add finalizer to delete _Parser so we don't leak
+    init: func ~file (file: File) {
+        init()
+        setInputFile(file)
+    }
+
+    init: func ~string (text: String) {
+        init()
+        setInputString(text)
+    }
 
     setInputString: func(text: String) {
         parser setInputString(text, text length())
