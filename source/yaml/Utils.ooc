@@ -21,6 +21,17 @@ extend Document {
 
 extend DocumentNode {
 
+    write: func ~file (file: File) {
+        emitter := YAMLEmitter new()
+        emitter setOutputFile(file)
+        emitter streamStart()
+        emitter documentStart()
+        emit(emitter)
+        emitter documentEnd()
+        emitter streamEnd()
+        emitter delete()
+    }
+
     asMap: func -> MappingNode {
         if (!this) {
             raise("called asMap on null node!")
@@ -90,13 +101,43 @@ extend SequenceNode {
 
 }
 
+// map get
 operator [] (node: DocumentNode, key: String) -> DocumentNode {
-    map := node asMap()
-    map map get(key)
+    node asMap() map get(key)
 }
 
+// map put
+operator []= (node: DocumentNode, key: String, value: DocumentNode) {
+    node asMap() map put(key, value)
+}
+
+// map put scalar
+operator []= (node: DocumentNode, key: String, value: String) {
+    node[key] = ScalarNode new(value)
+}
+
+// list get
 operator [] (node: DocumentNode, index: Int) -> DocumentNode {
-    list := node asList()
-    list nodes get(index)
+    node asList() nodes get(index)
+}
+
+// list set
+operator []= (node: DocumentNode, index: Int, value: DocumentNode) {
+    node asList() nodes set(index, value)
+}
+
+// list set scalar
+operator []= (node: DocumentNode, index: Int, value: String) {
+    node[index] = ScalarNode new(value)
+}
+
+// list append
+operator << (node: DocumentNode, value: DocumentNode) {
+    node asList() nodes add(value)
+}
+
+// list append scalar
+operator << (node: DocumentNode, value: String) {
+    node << ScalarNode new(value)
 }
 
