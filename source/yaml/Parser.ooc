@@ -5,8 +5,8 @@ import io/[File, FileReader]
 
 
 /**
-    A YAML streaming, event-driven parser.
-*/
+ *  A YAML streaming, event-driven parser.
+ */
 YAMLParser: class {
     parser: _Parser
 
@@ -14,7 +14,7 @@ YAMLParser: class {
         parser = _Parser new()
     }
 
-   //TODO: add finializer to delete _Parser so we don't leak
+    // TODO: add finalizer to delete _Parser so we don't leak
 
     setInputString: func(text: String) {
         parser setInputString(text, text length())
@@ -118,3 +118,4 @@ _Parser: cover from yaml_parser_t* {
 
     parse: extern(yaml_parser_parse) func(event: Event*) -> Int
 }
+

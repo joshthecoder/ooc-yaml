@@ -140,13 +140,13 @@ MappingNode: class extends DocumentNode {
                 key = (value as ScalarNode) value
             }
             else {
-                YAMLError new("Invalid mapping key type!") throw()
-            }
+                    YAMLError new("Invalid mapping key type!") throw()
         }
-        else {
+    }
+    else {
             map add(key, value)
-            key = null
-        }
+    key = null
+}
     }
 
     put: func (key: String, value: DocumentNode) {

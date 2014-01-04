@@ -5,8 +5,8 @@ import io/[File, FileReader]
 
 
 /**
-    A YAML emitter.
-*/
+ *  A YAML emitter.
+ */
 YAMLEmitter: class {
     emitter: _Emitter
     event: EventPointer
