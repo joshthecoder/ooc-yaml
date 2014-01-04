@@ -45,6 +45,17 @@ root each(|node|
 
 Note that `_` is a shortcut to convert a scalar node to a string.
 
+The `yaml/Utils` module contains other useful shortcuts - you can index any
+DocumentNode like this:
+
+```ooc
+// as a map
+node["somekey"]
+
+// as a list
+node[23]
+```
+
 See the `samples/` directory for custom callbacks, multiple documents, etc.
 
 ### Authors
