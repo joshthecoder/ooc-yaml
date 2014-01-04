@@ -6,6 +6,9 @@ import yaml/[Document, Parser]
 extend DocumentNode {
 
     asMap: func -> MappingNode {
+        if (!this) {
+            raise("called asMap on null node!")
+        }
         match this {
             case map: MappingNode =>
                 map
@@ -16,6 +19,9 @@ extend DocumentNode {
     }
 
     asList: func -> SequenceNode {
+        if (!this) {
+            raise("called asList on null node!")
+        }
         match this {
             case seq: SequenceNode =>
                 seq
@@ -26,6 +32,9 @@ extend DocumentNode {
     }
 
     asScalar: func -> String {
+        if (!this) {
+            raise("called asScalar on null node!")
+        }
         match this {
             case scalar: ScalarNode =>
                 scalar value
