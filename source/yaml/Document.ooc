@@ -1,5 +1,5 @@
 use yaml
-import yaml/[Parser, Event, Emitter]
+import yaml/[Parser, Event, Emitter, Utils]
 
 import structs/[Stack, ArrayList, HashMap]
 

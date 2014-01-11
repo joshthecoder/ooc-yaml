@@ -25,7 +25,7 @@ YAMLParser: class {
     }
 
     setInputString: func(text: String) {
-        parser setInputString(text, text length())
+        parser setInputString(text toCString() as UChar*, text length())
     }
 
     setInputFile: func(file: File) {
@@ -121,7 +121,7 @@ _Parser: cover from yaml_parser_t* {
 
     delete: extern(yaml_parser_delete) func
 
-    setInputString: extern(yaml_parser_set_input_string) func(input: CString, size: SizeT)
+    setInputString: extern(yaml_parser_set_input_string) func(input: UChar*, size: SizeT)
     setInputFile: extern(yaml_parser_set_input_file) func(file: FILE*)
 
     parse: extern(yaml_parser_parse) func(event: Event*) -> Int

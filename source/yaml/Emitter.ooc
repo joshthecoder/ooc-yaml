@@ -30,8 +30,8 @@ YAMLEmitter: class {
         setOutputFile(File new(path))
     }
 
-    setOutputString: func (buffer: CString, bufferSize: Int, writtenSize: Int*) {
-        emitter setOutputString(buffer, bufferSize, writtenSize)
+    setOutputString: func (buffer: CString, bufferSize: Int, writtenSize: SizeT*) {
+        emitter setOutputString(buffer as UChar*, bufferSize, writtenSize)
     }
 
     checkError: func (statusCode: Int) {
@@ -91,7 +91,8 @@ YAMLEmitter: class {
     }
 
     scalar: func (value: String) {
-        event initScalar(null, null, value toCString(), value size, true, false, YAMLScalarStyle plain)
+        event initScalar(null, null, value toCString() as UChar*, value size,
+                         true, false, YAMLScalarStyle plain)
         emit()
     }
 
@@ -144,7 +145,7 @@ _Emitter: cover from yaml_emitter_t* {
     setCanonical: extern(yaml_emitter_set_canonical) func (Bool)
 
     setOutputFile: extern(yaml_emitter_set_output_file) func (file: FILE*)
-    setOutputString: extern(yaml_emitter_set_output_string) func (CString, Int, Int*)
+    setOutputString: extern(yaml_emitter_set_output_string) func (UChar*, Int, SizeT*)
 
     emit: extern(yaml_emitter_emit) func (e: Event*) -> Int
 }

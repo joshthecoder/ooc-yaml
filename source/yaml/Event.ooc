@@ -13,7 +13,7 @@ EventPointer: cover from Event* {
     initDocumentStart: extern(yaml_document_start_event_initialize) func (VersionDirective*,
         TagDirective*, TagDirective*, Bool)
     initDocumentEnd: extern(yaml_document_end_event_initialize) func (Bool)
-    initScalar: extern(yaml_scalar_event_initialize) func (CString, CString, CString, SizeT, Bool, Bool, YAMLScalarStyle)
+    initScalar: extern(yaml_scalar_event_initialize) func (CString, UChar*, UChar*, SizeT, Bool, Bool, YAMLScalarStyle)
 
     initSequenceStart: extern(yaml_sequence_start_event_initialize) func (CString, CString, Bool, YAMLSequenceStyle)
     initSequenceEnd: extern(yaml_sequence_end_event_initialize) func
