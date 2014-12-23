@@ -1,0 +1,15 @@
+before_install:
+  - sudo apt-get -y -qq install curl make libgc-dev libyaml-dev
+  - git clone --depth=1 git://github.com/nddrylliog/rock.git 
+  - (cd rock && make -s quick-rescue)
+  - export PATH=$PATH:$PWD/rock/bin
+
+script:
+  - export OOC_LIBS=$PWD
+  - cd samples
+  - mkdir -p travis
+  - rock -v from-string.ooc -o=travis/from-string && travis/from-string
+  - rock -v from-file.ooc -o=travis/from-file && travis/from-file
+  - rock -v walker.ooc -o=travis/walker && travis/walker
+  - rock -v utils-demo.ooc -o=travis/utils-demo && travis/utils-demo
+

@@ -5,8 +5,8 @@ import io/[File, FileReader]
 
 
 /**
-    A YAML streaming, event-driven parser.
-*/
+ *  A YAML streaming, event-driven parser.
+ */
 YAMLParser: class {
     parser: _Parser
 
@@ -14,15 +14,22 @@ YAMLParser: class {
         parser = _Parser new()
     }
 
-   //TODO: add finializer to delete _Parser so we don't leak
+    init: func ~file (file: File) {
+        init()
+        setInputFile(file)
+    }
+
+    init: func ~string (text: String) {
+        init()
+        setInputString(text)
+    }
 
     setInputString: func(text: String) {
-        parser setInputString(text, text length())
+        parser setInputString(text toCString() as UChar*, text length())
     }
 
     setInputFile: func(file: File) {
-        f := fopen(file getPath(), "r")
-        parser setInputFile(f)
+        setInputString(file read())
     }
 
     setInputFile: func ~path(path: String) {
@@ -36,7 +43,7 @@ YAMLParser: class {
         }
     }
     parseEvent: func -> Event* {
-        event := gc_malloc(Event instanceSize) as Event*
+        event : Event* = gc_malloc(Event instanceSize)
         parseEvent(event)
         return event
     }
@@ -52,6 +59,10 @@ YAMLParser: class {
         document := Document new()
         parseAll(document)
         return document
+    }
+
+    destroy: func {
+        parser delete()
     }
 }
 
@@ -89,14 +100,17 @@ YAMLCallback: abstract class {
 }
 
 YAMLError: class extends Exception {
-    init: func { super("YAMLError") }
+    init: func { init("YAMLError") }
+    init: func ~message (message: String) {
+        super(message)
+    }
 }
 
 ParserStruct: cover from struct yaml_parser_s
 
 _Parser: cover from yaml_parser_t* {
     new: static func -> This {
-        instance: This = gc_malloc(ParserStruct instanceSize)
+        instance := gc_malloc(ParserStruct instanceSize) as _Parser
         if(!instance _init()) {
             Exception new("Failed to initialize parser!") throw()
         }
@@ -107,8 +121,9 @@ _Parser: cover from yaml_parser_t* {
 
     delete: extern(yaml_parser_delete) func
 
-    setInputString: extern(yaml_parser_set_input_string) func(input: const UChar*, size: SizeT)
+    setInputString: extern(yaml_parser_set_input_string) func(input: UChar*, size: SizeT)
     setInputFile: extern(yaml_parser_set_input_file) func(file: FILE*)
 
     parse: extern(yaml_parser_parse) func(event: Event*) -> Int
 }
+

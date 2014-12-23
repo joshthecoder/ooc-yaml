@@ -1,0 +1,23 @@
+name: curl
+description: cURL and libcurl
+version: 7.x
+
+source: github nddrylliog/ooc-curl
+
+platforms:
+  - os: linux
+    distribution: ubuntu
+    setup:
+      - apt libcurl4-openssl-dev
+
+  - os: osx
+    setup:
+      - brew curl
+
+  - deps:
+      - pkg-config libcurl
+    check:
+      - c:
+        - headers curl/curl curl/easy
+      
+
